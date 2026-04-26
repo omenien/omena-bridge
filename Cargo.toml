@@ -6,6 +6,9 @@ license = "MIT"
 description = "CME-coupled bridge surfaces for Omena semantic graph inputs"
 repository = "https://github.com/omenien/omena-bridge"
 readme = "README.md"
+keywords = ["omena", "css-modules", "semantic", "analysis"]
+categories = ["development-tools"]
+exclude = [".github/**"]
 
 [lib]
 name = "omena_bridge"
@@ -22,11 +25,7 @@ expect_used = "warn"
 panic = "warn"
 
 [dependencies]
-engine-input-producers = { package = "omena-engine-input-producers", git = "https://github.com/omenien/omena-engine-input-producers.git", rev = "9e4d29c" }
-engine-style-parser = { package = "omena-engine-style-parser", git = "https://github.com/omenien/omena-engine-style-parser.git", rev = "4dcf39d" }
-omena-semantic = { git = "https://github.com/omenien/omena-semantic.git", rev = "fc0a49f" }
+engine-input-producers = { package = "omena-engine-input-producers", version = "0.1.0" }
+engine-style-parser = { package = "omena-engine-style-parser", version = "0.1.0" }
+omena-semantic = "0.1.1"
 serde = { version = "1.0", features = ["derive"] }
-
-[patch.crates-io]
-omena-engine-input-producers = { git = "https://github.com/omenien/omena-engine-input-producers.git", rev = "9e4d29c" }
-omena-engine-style-parser = { git = "https://github.com/omenien/omena-engine-style-parser.git", rev = "4dcf39d" }

@@ -15,8 +15,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
+name = "omena-abstract-value"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e23dbb06cc36966d1592056430fa848ea583bb3c354e5f27b2beb4700814d74a"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "omena-bridge"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "omena-engine-input-producers",
  "omena-engine-style-parser",
@@ -26,10 +35,11 @@ dependencies = [
 
 [[package]]
 name = "omena-engine-input-producers"
-version = "0.1.0"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00f9914b7f2fa1e7a7dd8681df48572bd66e4b8eabee6c60644d8213d7968d17"
+checksum = "a4385262a93f0d1a6437b5fde793903e01207ad9a0cf31d2da565c6b611fdba9"
 dependencies = [
+ "omena-abstract-value",
  "serde",
  "serde_json",
 ]
@@ -46,9 +56,9 @@ dependencies = [
 
 [[package]]
 name = "omena-semantic"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c6c19a8eb136feddea31967e603de719363ba8f27b1376f38ae9dd585bcc96a"
+checksum = "6d429949a35930ef1c29c360bf027a416775806527d0054f2554c6ab3e9fc014"
 dependencies = [
  "omena-engine-input-producers",
  "omena-engine-style-parser",

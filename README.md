@@ -14,8 +14,10 @@ Current public products:
 - `omena-semantic.source-input-evidence`
 - `omena-semantic.promotion-evidence`
 
-`omena-semantic.source-input-evidence` includes value-domain derivation counts
-from the source-backed expression-semantics payload.
+`omena-semantic.promotion-evidence` includes parser-backed design-token seed
+facts from CSS custom properties. `omena-semantic.source-input-evidence`
+includes value-domain derivation counts from the source-backed
+expression-semantics payload.
 
 Primary check:
 

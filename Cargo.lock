@@ -25,7 +25,7 @@ dependencies = [
 
 [[package]]
 name = "omena-bridge"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "omena-engine-input-producers",
  "omena-engine-style-parser",
@@ -56,9 +56,9 @@ dependencies = [
 
 [[package]]
 name = "omena-semantic"
-version = "0.1.6"
+version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08ab96877bf6b6a09ae02ed086dd92219da153312cec7a6da9b71e430c8dd46d"
+checksum = "16fe0db0a358d6084522563cc12c83ba0530857bc0f910b24c28bc03cb128f46"
 dependencies = [
  "omena-engine-input-producers",
  "omena-engine-style-parser",

@@ -1,6 +1,6 @@
 [package]
 name = "omena-bridge"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2024"
 license = "MIT"
 description = "CME-coupled bridge surfaces for Omena semantic graph inputs"
@@ -27,5 +27,5 @@ panic = "warn"
 [dependencies]
 engine-input-producers = { package = "omena-engine-input-producers", version = "0.1.2" }
 engine-style-parser = { package = "omena-engine-style-parser", version = "0.1.3" }
-omena-semantic = "0.1.6"
+omena-semantic = "0.1.7"
 serde = { version = "1.0", features = ["derive"] }

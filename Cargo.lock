@@ -25,7 +25,7 @@ dependencies = [
 
 [[package]]
 name = "omena-bridge"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "omena-engine-input-producers",
  "omena-engine-style-parser",

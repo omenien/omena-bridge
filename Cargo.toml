@@ -1,6 +1,6 @@
 [package]
 name = "omena-bridge"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2024"
 license = "MIT"
 description = "CME-coupled bridge surfaces for Omena semantic graph inputs"

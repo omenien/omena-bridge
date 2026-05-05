@@ -28,6 +28,18 @@ Current public products:
   evidence product, kept stable for existing host consumers while ownership
   moves behind this crate. The evidence includes parser-backed design-token
   seed facts from CSS custom properties.
+- `omena-bridge.source-import-declarations` — OXC-backed source import
+  declaration producer for CSS Module style imports and `classnames/bind`
+  bindings consumed by the Rust LSP source syntax index.
+- `omena-bridge.style-resolution` — style specifier resolver for relative
+  imports and tsconfig/jsconfig path aliases, including Sass partial and index
+  candidate expansion for LSP and bridge consumers.
+- `omena-bridge.binder-plugin-boundary` — built-in `BinderPluginV0` boundary
+  for source-side class-name tracking. The default plugin keeps the current CSS
+  Modules + `classnames/bind`/`classnames`/`clsx` behavior behind one boundary;
+  the first utility-domain proof point tracks Tailwind/Uno class references
+  without claiming a CSS Module style source. External plugin ABI is
+  intentionally not stable yet.
 
 Primary check:
 

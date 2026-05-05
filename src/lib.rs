@@ -13,6 +13,9 @@ use serde::Serialize;
 mod promotion_evidence;
 mod selector_references;
 mod source_evidence;
+mod source_imports;
+mod source_syntax;
+mod style_resolution;
 
 pub use promotion_evidence::{
     SemanticPromotionEvidenceItemV0, SemanticPromotionEvidenceSummaryV0,
@@ -28,6 +31,21 @@ pub use source_evidence::{
     BindingOriginEvidenceV0, CertaintyReasonEvidenceV0, ReferenceSiteIdentityEvidenceV0,
     SourceInputPromotionEvidenceSummaryV0, StyleModuleEdgeEvidenceV0,
     ValueDomainExplanationEvidenceV0, summarize_omena_bridge_source_input_evidence,
+};
+pub use source_imports::{
+    SourceImportDeclarationSummaryV0, SourceImportDeclarationV0,
+    summarize_omena_bridge_source_import_declarations,
+    summarize_omena_bridge_source_import_declarations_for_path,
+};
+pub use source_syntax::{
+    SourceImportedStyleBindingV0, SourceSelectorReferenceFactV0,
+    SourceSelectorReferenceMatchKindV0, SourceStylePropertyAccessFactV0, SourceSyntaxIndexV0,
+    SourceTypeFactTargetV0, canonicalize_source_selector_references,
+    summarize_omena_bridge_source_syntax_index,
+};
+pub use style_resolution::{
+    OmenaBridgeStyleResolutionSummaryV0, resolve_omena_bridge_style_uri_for_specifier,
+    summarize_omena_bridge_style_resolution_boundary,
 };
 
 pub fn collect_omena_bridge_design_token_workspace_declarations(
@@ -48,9 +66,36 @@ pub struct OmenaBridgeBoundarySummaryV0 {
     pub delegated_semantic_boundary_product: &'static str,
     pub selector_reference_product: &'static str,
     pub source_input_evidence_product: &'static str,
+    pub binder_plugin_product: &'static str,
     pub bridge_owned_surfaces: Vec<&'static str>,
     pub cme_coupled_surfaces: Vec<&'static str>,
     pub next_decoupling_targets: Vec<&'static str>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BinderPluginBoundarySummaryV0 {
+    pub schema_version: &'static str,
+    pub product: &'static str,
+    pub owner_crate: &'static str,
+    pub contract_name: &'static str,
+    pub external_plugin_abi_stable: bool,
+    pub default_plugin: BinderPluginSummaryV0,
+    pub built_in_plugins: Vec<BinderPluginSummaryV0>,
+    pub request_path_policy: Vec<&'static str>,
+    pub next_plugin_targets: Vec<&'static str>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BinderPluginSummaryV0 {
+    pub id: &'static str,
+    pub version: &'static str,
+    pub stability: &'static str,
+    pub domains: Vec<&'static str>,
+    pub owns_surfaces: Vec<&'static str>,
+    pub import_targets: Vec<&'static str>,
+    pub utility_targets: Vec<&'static str>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -78,12 +123,17 @@ pub fn summarize_omena_bridge_boundary() -> OmenaBridgeBoundarySummaryV0 {
         delegated_semantic_boundary_product: "omena-semantic.style-semantic-boundary",
         selector_reference_product: "omena-semantic.selector-references",
         source_input_evidence_product: "omena-semantic.source-input-evidence",
+        binder_plugin_product: "omena-bridge.binder-plugin-boundary",
         bridge_owned_surfaces: vec![
             "styleSemanticGraph",
             "styleSemanticGraphFromSource",
             "selectorReferenceEngine",
             "sourceInputEvidence",
+            "sourceImportDeclarations",
+            "styleResolution",
+            "sourceSyntaxIndex",
             "promotionEvidenceWithSourceInput",
+            "binderPluginBoundary",
         ],
         cme_coupled_surfaces: vec![
             "EngineInputV2",
@@ -91,8 +141,68 @@ pub fn summarize_omena_bridge_boundary() -> OmenaBridgeBoundarySummaryV0 {
             "selectorReferenceEngine",
             "promotionEvidenceWithSourceInput",
             "styleSemanticGraphFromSource",
+            "cssModulesClassnameBinding",
+            "sourceSyntaxIndex",
+            "styleResolution",
         ],
         next_decoupling_targets: Vec::new(),
+    }
+}
+
+pub fn summarize_omena_bridge_binder_plugin_boundary() -> BinderPluginBoundarySummaryV0 {
+    BinderPluginBoundarySummaryV0 {
+        schema_version: "0",
+        product: "omena-bridge.binder-plugin-boundary",
+        owner_crate: "omena-bridge",
+        contract_name: "BinderPluginV0",
+        external_plugin_abi_stable: false,
+        default_plugin: BinderPluginSummaryV0 {
+            id: "css-modules-classnames-bind",
+            version: "0",
+            stability: "builtIn",
+            domains: vec!["css-modules"],
+            owns_surfaces: vec![
+                "styleImportRecognition",
+                "classUtilityRecognition",
+                "classReferenceExtraction",
+                "sourceExpressionProjection",
+            ],
+            import_targets: vec!["*.module.css", "*.module.scss", "*.module.less"],
+            utility_targets: vec!["classnames/bind", "classnames", "clsx", "clsx/lite"],
+        },
+        built_in_plugins: vec![
+            BinderPluginSummaryV0 {
+                id: "css-modules-classnames-bind",
+                version: "0",
+                stability: "builtIn",
+                domains: vec!["css-modules"],
+                owns_surfaces: vec![
+                    "styleImportRecognition",
+                    "classUtilityRecognition",
+                    "classReferenceExtraction",
+                    "sourceExpressionProjection",
+                ],
+                import_targets: vec!["*.module.css", "*.module.scss", "*.module.less"],
+                utility_targets: vec!["classnames/bind", "classnames", "clsx", "clsx/lite"],
+            },
+            BinderPluginSummaryV0 {
+                id: "tailwind-uno-utility-domain",
+                version: "0",
+                stability: "builtIn",
+                domains: vec!["tailwind-utilities", "unocss-utilities"],
+                owns_surfaces: vec!["domainClassReferenceExtraction"],
+                import_targets: Vec::new(),
+                utility_targets: vec!["class", "className", "classnames", "clsx", "clsx/lite"],
+            },
+        ],
+        request_path_policy: vec![
+            "builtInPluginsOnlyUntilAbiStabilizes",
+            "pluginOutputFeedsEngineInputV2",
+            "sourceExpressionProjectionMustPreserveBindingIdentity",
+            "styleImportResolutionMustRemainTargetAware",
+            "styleSourceExtractionIsOptionalForUtilityDomains",
+        ],
+        next_plugin_targets: vec!["vanilla-extract-recipe-domain", "vue-style-module-domain"],
     }
 }
 
@@ -198,9 +308,10 @@ mod tests {
     use engine_style_parser::parse_style_module;
 
     use super::{
-        summarize_omena_bridge_boundary,
+        summarize_omena_bridge_binder_plugin_boundary, summarize_omena_bridge_boundary,
         summarize_omena_bridge_promotion_evidence_with_source_input,
         summarize_omena_bridge_selector_reference_engine,
+        summarize_omena_bridge_source_import_declarations,
         summarize_omena_bridge_source_input_evidence, summarize_omena_bridge_style_semantic_graph,
         summarize_omena_bridge_style_semantic_graph_from_source,
     };
@@ -227,6 +338,10 @@ mod tests {
             boundary.source_input_evidence_product,
             "omena-semantic.source-input-evidence"
         );
+        assert_eq!(
+            boundary.binder_plugin_product,
+            "omena-bridge.binder-plugin-boundary"
+        );
         assert!(
             boundary
                 .bridge_owned_surfaces
@@ -249,12 +364,106 @@ mod tests {
         );
         assert!(
             boundary
+                .bridge_owned_surfaces
+                .contains(&"sourceImportDeclarations")
+        );
+        assert!(boundary.bridge_owned_surfaces.contains(&"styleResolution"));
+        assert!(
+            boundary
+                .bridge_owned_surfaces
+                .contains(&"sourceSyntaxIndex")
+        );
+        assert!(
+            boundary
+                .bridge_owned_surfaces
+                .contains(&"binderPluginBoundary")
+        );
+        assert!(
+            boundary
                 .cme_coupled_surfaces
                 .contains(&"promotionEvidenceWithSourceInput")
         );
         assert!(
             boundary.next_decoupling_targets.is_empty(),
             "all current omena-bridge decoupling targets should be bridge-owned"
+        );
+    }
+
+    #[test]
+    fn declares_built_in_binder_plugin_boundary() {
+        let boundary = summarize_omena_bridge_binder_plugin_boundary();
+
+        assert_eq!(boundary.schema_version, "0");
+        assert_eq!(boundary.product, "omena-bridge.binder-plugin-boundary");
+        assert_eq!(boundary.contract_name, "BinderPluginV0");
+        assert!(
+            !boundary.external_plugin_abi_stable,
+            "the first boundary cut should not promise a stable external plugin ABI"
+        );
+        assert_eq!(boundary.default_plugin.id, "css-modules-classnames-bind");
+        assert_eq!(boundary.default_plugin.stability, "builtIn");
+        assert!(boundary.default_plugin.domains.contains(&"css-modules"));
+        assert!(
+            boundary
+                .default_plugin
+                .owns_surfaces
+                .contains(&"classReferenceExtraction")
+        );
+        assert!(
+            boundary
+                .default_plugin
+                .utility_targets
+                .contains(&"classnames/bind")
+        );
+        assert!(
+            boundary
+                .request_path_policy
+                .contains(&"pluginOutputFeedsEngineInputV2")
+        );
+        assert!(
+            boundary
+                .request_path_policy
+                .contains(&"styleSourceExtractionIsOptionalForUtilityDomains")
+        );
+        assert!(boundary.built_in_plugins.iter().any(|plugin| {
+            plugin.id == "tailwind-uno-utility-domain"
+                && plugin.domains.contains(&"tailwind-utilities")
+                && plugin
+                    .owns_surfaces
+                    .contains(&"domainClassReferenceExtraction")
+        }));
+        assert!(
+            !boundary
+                .next_plugin_targets
+                .contains(&"tailwind-utility-domain")
+        );
+    }
+
+    #[test]
+    fn summarizes_source_import_declarations_for_css_modules_binding_inputs() {
+        let summary = summarize_omena_bridge_source_import_declarations(
+            r#"
+import bind from "classnames/bind";
+import styles from "./Button.module.scss";
+import * as tokens from "./tokens.module.css";
+import { type BadgeProps } from "./types";
+const lazy = import("./ignored.module.scss");
+"#,
+        );
+
+        assert_eq!(summary.product, "omena-bridge.source-import-declarations");
+        assert_eq!(summary.import_count, 3);
+        assert_eq!(
+            summary
+                .imports
+                .iter()
+                .map(|import| (import.binding.as_str(), import.specifier.as_str()))
+                .collect::<Vec<_>>(),
+            vec![
+                ("bind", "classnames/bind"),
+                ("styles", "./Button.module.scss"),
+                ("tokens", "./tokens.module.css"),
+            ]
         );
     }
 

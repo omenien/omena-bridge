@@ -124,10 +124,11 @@ dependencies = [
 
 [[package]]
 name = "omena-abstract-value"
-version = "0.1.2"
+version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbcf3c42b554a5cc7b63fba8a97bf8afe77c70057d778218b4e7cd6f98a80e75"
+checksum = "04ef8d94319955ebcd00417c43bb6b078363275800b889b4a7a2137f1be8e484"
 dependencies = [
+ "omena-incremental",
  "serde",
 ]
 
@@ -159,12 +160,21 @@ dependencies = [
 
 [[package]]
 name = "omena-engine-style-parser"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db8b390574dadbf8ecbbee8f1c3245ebd7bdfe25d596cd92fcb9bd42f996bdc5"
+checksum = "cb5fb5baa47a6bd088922c5b944e3a7f71947f56c43bbfc75370846681665f19"
 dependencies = [
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "omena-incremental"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bc9f76417894506450d924a51f015d45a9e86ab8ad58428241129a18d102974"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

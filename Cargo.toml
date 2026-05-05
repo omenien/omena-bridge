@@ -25,9 +25,9 @@ expect_used = "warn"
 panic = "warn"
 
 [dependencies]
-engine-input-producers = { package = "omena-engine-input-producers", version = "0.1.2" }
-engine-style-parser = { package = "omena-engine-style-parser", version = "0.1.4" }
-omena-semantic = "0.1.9"
+engine-input-producers = { package = "omena-engine-input-producers", git = "https://github.com/omenien/omena-engine-input-producers.git", rev = "7b08f67" }
+engine-style-parser = { package = "omena-engine-style-parser", git = "https://github.com/omenien/omena-engine-style-parser.git", rev = "5e809bf" }
+omena-semantic = { git = "https://github.com/omenien/omena-semantic.git", rev = "0508f29" }
 oxc_allocator = "0.128.0"
 oxc_ast = "0.128.0"
 oxc_parser = "0.128.0"
